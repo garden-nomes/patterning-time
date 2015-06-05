@@ -40,7 +40,7 @@ void setup() {
   off = strip.Color(0, 0, 0);
 
   // initialize cells to random states
-  for (int i = 0; i < CELL_COUNT; i++) {
+  for (byte i = 0; i < CELL_COUNT; i++) {
     if (random(2) > 0) {
       cells[i] = true;
       brightness[i] = 255;
@@ -65,7 +65,7 @@ void loop() {
 
 #ifdef SERIAL_COMMUNICATION
     // send state to computer
-    for (int i = 0; i < CELL_COUNT; i++) {
+    for (byte i = 0; i < CELL_COUNT; i++) {
       Serial.print(cells[i]);
     }
     Serial.print('\n');
@@ -81,7 +81,7 @@ void loop() {
 
 void generate() {
   // copy cells into buffer
-  for (int i = 0; i < CELL_COUNT; i++) {
+  for (byte i = 0; i < CELL_COUNT; i++) {
     cellsBuffer[i] = cells[i];
   }
 
@@ -94,7 +94,7 @@ void generate() {
     l = false;
   }
 
-  for (int i = 0; i < CELL_COUNT; i++) {
+  for (byte i = 0; i < CELL_COUNT; i++) {
     c = cells[i];
 
     // if we have hit the rightmost bound set the right (offscreen) value to random state
@@ -139,15 +139,15 @@ void generate() {
 }
 
 void displayCells(long tick) {
-  for (int i = 0; i < CELL_COUNT; i++) {
+  for (byte i = 0; i < CELL_COUNT; i++) {
     if (cells[i]) {
-      if (brightness[i] < 255) brightness[i] += map((int)tick, 0, FADE_SPEED, 0, 255);
+      if (brightness[i] < 255) brightness[i] += map(tick, 0, FADE_SPEED, 0, 255);
       if (brightness[i] > 255) brightness[i] = 255;
     } else {
-      if (brightness[i] > 0) brightness[i] -= map((int)tick, 0, FADE_SPEED, 0, 255);
+      if (brightness[i] > 0) brightness[i] -= map(tick, 0, FADE_SPEED, 0, 255);
       if (brightness[i] < 0) brightness[i] = 0;
     }
-    strip.setPixelColor(i, generateColor(i, (byte)brightness[i]));
+    strip.setPixelColor(i, generateColor(i, brightness[i]));
   }
 
   strip.show();
